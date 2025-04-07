@@ -9,11 +9,10 @@ const App = () => {
   const [loading, setLoading] = useState(false);
 
   const apiKey = "c1d9c062859ee2693fafa991d613045a";
-  const apiUrl = "https://api.themoviedb.org/3/movie/popular"; // Fetching popular movies initially
-  const searchUrl = "https://api.themoviedb.org/3/search/movie"; // API URL for searching by title
-  const youtubeUrl = "https://www.youtube.com/watch?v="; // YouTube URL base for trailer links
+  const apiUrl = "https://api.themoviedb.org/3/movie/popular";
+  const searchUrl = "https://api.themoviedb.org/3/search/movie"; 
+  const youtubeUrl = "https://www.youtube.com/watch?v="; 
 
-  // Fetch popular movies on component mount
   useEffect(() => {
     const fetchMovies = async () => {
       setLoading(true);
@@ -27,7 +26,7 @@ const App = () => {
         });
         if (response.status === 200 && response.data.results) {
           setMovies(response.data.results);
-          setErrorMessage(""); // Clear error message if movies are found
+          setErrorMessage(""); 
         } else {
           setErrorMessage("No movies found.");
         }
@@ -47,13 +46,10 @@ const App = () => {
 
     fetchMovies();
   }, []);
-
-  // Handle search query change
   const handleSearchChange = async (e) => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    // If the search query is empty, show all popular movies
     if (query === "") {
       setLoading(true);
       try {
@@ -66,7 +62,7 @@ const App = () => {
         });
         if (response.status === 200 && response.data.results) {
           setMovies(response.data.results);
-          setErrorMessage(""); // Clear error message
+          setErrorMessage(""); 
         }
       } catch (error) {
         console.error("Network error or invalid API response:", error);
@@ -83,7 +79,6 @@ const App = () => {
       return;
     }
 
-    // Fetch movies by search query
     setLoading(true);
     try {
       const response = await axios.get(searchUrl, {
@@ -99,7 +94,7 @@ const App = () => {
           setErrorMessage("No movies found.");
         } else {
           setMovies(response.data.results);
-          setErrorMessage(""); // Clear error message
+          setErrorMessage(""); 
         }
       } else {
         setErrorMessage("No movies found.");
@@ -118,11 +113,9 @@ const App = () => {
     }
   };
 
-  // Handle movie click to display details
   const handleMovieClick = async (movie) => {
     setSelectedMovie(movie);
 
-    // Fetch the trailer for the selected movie
     try {
       const response = await axios.get(
         'https://api.themoviedb.org/3/movie/${movie.id}/videos',
@@ -163,7 +156,6 @@ const App = () => {
     <div className="container bg-black text-white mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">Movie App</h1>
 
-      {/* Search bar */}
       <div className="mb-8 text-black flex justify-center">
         <input
           type="text"
@@ -174,13 +166,10 @@ const App = () => {
         />
       </div>
 
-      {/* Error message */}
       {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
 
-      {/* Loading indicator */}
       {loading && <p className="text-center text-gray-500">Loading...</p>}
 
-      {/* Movie grid */}
       <div className="grid text-black grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {movies.map((movie) => (
           <div
@@ -201,7 +190,6 @@ const App = () => {
         ))}
       </div>
 
-      {/* Movie details modal */}
       {selectedMovie && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-gray-700 text-white p-6 rounded-lg w-2/3 max-h-full overflow-y-auto">
@@ -213,7 +201,6 @@ const App = () => {
             />
             <p className="mb-4">{selectedMovie.overview}</p>
 
-            {/* YouTube trailer */}
             {selectedMovie.trailerUrl && (
               <iframe
                 className="w-full h-60 mb-4"
